@@ -1,10 +1,9 @@
 .problem-panel {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  overflow: hidden;
+  background: var(--surface-container-low);
   display: flex;
   flex-direction: column;
+  height: 100%;
+  overflow: hidden;
 }
 
 .problem-body {
@@ -14,69 +13,66 @@
 }
 
 .problem-description {
-  font-size: 0.88rem;
-  line-height: 1.7;
-  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--on-surface-variant);
   margin-bottom: var(--space-md);
 }
 .problem-description p {
-  margin-bottom: var(--space-xs);
+  margin-bottom: 6px;
 }
 
 .test-cases-section {
-  border-top: 1px solid var(--border-subtle);
+  border-top: 1px solid var(--outline-variant);
   padding-top: var(--space-md);
 }
-
 .test-cases-title {
-  font-size: 0.82rem;
+  font-size: 11px;
   font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--outline);
   margin-bottom: var(--space-sm);
-  color: var(--text-secondary);
 }
 
 .test-case-item {
-  background: var(--bg-tertiary);
-  border-radius: var(--radius-sm);
-  padding: var(--space-sm) var(--space-md);
+  background: var(--surface-container);
+  border-radius: var(--radius-md);
+  padding: 10px var(--space-md);
   margin-bottom: var(--space-sm);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--outline-variant);
 }
-
 .tc-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--space-xs);
+  margin-bottom: 6px;
 }
-
 .tc-label {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--primary-300);
   font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--interview-accent);
 }
-
 .tc-content {
   display: flex;
   flex-direction: column;
-  gap: var(--space-xs);
+  gap: 6px;
 }
-
 .tc-field-label {
-  font-size: 0.7rem;
-  color: var(--text-tertiary);
+  font-size: 10px;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
+  color: var(--outline);
 }
-
 .tc-field-value {
   font-family: var(--font-mono);
-  font-size: 0.78rem;
-  background: var(--bg-primary);
+  font-size: 12px;
+  background: var(--surface-container-lowest);
   padding: 4px 8px;
-  border-radius: 4px;
-  color: var(--text-primary);
+  border-radius: var(--radius-sm);
+  color: var(--on-surface);
   margin-top: 2px;
   white-space: pre-wrap;
   word-break: break-all;

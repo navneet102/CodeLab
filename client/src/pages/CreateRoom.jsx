@@ -153,6 +153,7 @@ const CreateRoom = () => {
                       type="button"
                       className={`mode-option ${form.mode === mode.id ? 'active' : ''}`}
                       onClick={() => updateForm('mode', mode.id)}
+                      data-mode={mode.id}
                       title={mode.desc}
                     >
                       <span className="mode-icon">{mode.icon}</span>

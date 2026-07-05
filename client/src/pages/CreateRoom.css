@@ -1,38 +1,39 @@
 .create-room-page {
-  min-height: calc(100vh - 56px);
+  min-height: calc(100vh - var(--toolbar-height));
   display: flex;
   justify-content: center;
   padding: var(--space-xl) var(--space-lg);
-  background: var(--gradient-surface);
+  background: var(--surface);
 }
 
 .create-room-container {
   width: 100%;
-  max-width: 720px;
+  max-width: 700px;
 }
 
 .create-room-header {
   margin-bottom: var(--space-xl);
 }
 .create-room-header h1 {
-  font-size: 1.8rem;
-  font-weight: 800;
-  margin-bottom: var(--space-xs);
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
 }
 
 .create-room-form {
   display: flex;
   flex-direction: column;
-  gap: var(--space-lg);
+  gap: var(--space-md);
 }
 
 .form-error {
   padding: 10px 14px;
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  border-radius: var(--radius-md);
+  background: rgba(255, 180, 171, 0.08);
+  border: 1px solid rgba(255, 180, 171, 0.25);
+  border-radius: var(--radius-lg);
   color: var(--error);
-  font-size: 0.85rem;
+  font-size: 13px;
 }
 
 .form-section {
@@ -40,9 +41,10 @@
   flex-direction: column;
   gap: var(--space-md);
   padding: var(--space-lg);
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
+  background: var(--surface-card);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  backdrop-filter: var(--glass-blur);
 }
 
 .form-row {
@@ -53,8 +55,8 @@
 
 .code-textarea {
   font-family: var(--font-mono);
-  font-size: 0.8rem;
-  line-height: 1.5;
+  font-size: 12px;
+  line-height: 18px;
   tab-size: 4;
 }
 
@@ -62,31 +64,45 @@
 .mode-selector {
   display: flex;
   gap: var(--space-sm);
+  flex-wrap: wrap;
 }
 
 .mode-option {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 8px 14px;
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  color: var(--text-secondary);
+  padding: 7px 14px;
+  background: var(--surface-container);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-lg);
+  color: var(--on-surface-variant);
   font-family: var(--font-sans);
-  font-size: 0.8rem;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   transition: all var(--transition-fast);
 }
 .mode-option:hover {
-  border-color: var(--primary-400);
-  color: var(--text-primary);
+  border-color: var(--outline);
+  color: var(--on-surface);
+  background: var(--surface-container-high);
 }
-.mode-option.active {
-  background: rgba(108, 63, 226, 0.15);
-  border-color: var(--primary-400);
-  color: var(--primary-300);
+
+/* Mode-specific active states */
+.mode-option.active[data-mode="collaborate"] {
+  background: rgba(148, 163, 184, 0.12);
+  border-color: rgba(148, 163, 184, 0.4);
+  color: var(--collab-accent);
+}
+.mode-option.active[data-mode="interview"] {
+  background: rgba(59, 130, 246, 0.12);
+  border-color: rgba(59, 130, 246, 0.4);
+  color: #60a5fa;
+}
+.mode-option.active[data-mode="teaching"] {
+  background: rgba(78, 222, 163, 0.12);
+  border-color: rgba(78, 222, 163, 0.4);
+  color: var(--teaching-accent);
 }
 
 .mode-icon { font-size: 1rem; }
@@ -102,17 +118,17 @@
   display: flex;
   gap: var(--space-md);
   padding: var(--space-md);
-  background: var(--bg-tertiary);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-subtle);
+  background: var(--surface-container);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--outline-variant);
 }
 
 .test-case-num {
   font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 12px;
   font-weight: 700;
-  color: var(--primary-300);
-  min-width: 30px;
+  color: var(--interview-accent);
+  min-width: 28px;
   padding-top: 4px;
 }
 
@@ -124,8 +140,8 @@
 }
 
 .test-case-fields .textarea {
-  min-height: 60px;
-  font-size: 0.8rem;
+  min-height: 56px;
+  font-size: 12px;
 }
 
 .test-case-actions {
@@ -140,17 +156,14 @@
   align-items: center;
   gap: 4px;
   cursor: pointer;
-  color: var(--text-tertiary);
+  color: var(--outline);
+  font-size: 12px;
 }
 .hidden-toggle input[type="checkbox"] {
-  accent-color: var(--primary-500);
+  accent-color: var(--interview-accent);
 }
 
 @media (max-width: 640px) {
-  .form-row {
-    grid-template-columns: 1fr;
-  }
-  .mode-selector {
-    flex-direction: column;
-  }
+  .form-row { grid-template-columns: 1fr; }
+  .mode-selector { flex-direction: column; }
 }

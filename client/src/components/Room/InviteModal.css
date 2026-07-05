@@ -8,18 +8,18 @@
   align-items: center;
   gap: var(--space-md);
   padding: var(--space-md);
-  background: var(--bg-tertiary);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-subtle);
+  background: var(--surface-container);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--outline-variant);
   margin-bottom: var(--space-md);
 }
 
 .invite-code-label {
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: var(--text-tertiary);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--outline);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
   min-width: 70px;
 }
 
@@ -29,15 +29,13 @@
   font-size: 1.4rem;
   font-weight: 700;
   letter-spacing: 0.15em;
-  background: var(--gradient-accent);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--interview-accent);
 }
 
 .invite-link-value {
   flex: 1;
   font-family: var(--font-mono);
-  font-size: 0.78rem;
-  color: var(--text-secondary);
+  font-size: 12px;
+  color: var(--on-surface-variant);
+  word-break: break-all;
 }
