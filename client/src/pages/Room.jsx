@@ -135,7 +135,7 @@ const Room = () => {
 
       <div className="room-body">
         {/* ── Left icon sidebar ── */}
-        <div className="room-icon-sidebar" id="room-icon-sidebar">
+        {/* <div className="room-icon-sidebar" id="room-icon-sidebar">
           <button
             className={`icon-sidebar-btn ${activeSidebar === 'problem' ? 'active' : ''}`}
             title="Problem / Files"
@@ -168,14 +168,14 @@ const Room = () => {
               <line x1="12" y1="17" x2="12.01" y2="17"/>
             </svg>
           </button>
-        </div>
+        </div> */}
 
         {/* ── Problem Panel (collapsible left panel) ── */}
-        {activeSidebar === 'problem' && (
+        {/* {activeSidebar === 'problem' && (
           <div className="workspace-left" id="workspace-left">
             <ProblemPanel />
           </div>
-        )}
+        )} */}
 
         {/* ── Center: Editor + Execution bar + Terminal ── */}
         <div className="workspace-center" id="workspace-center">

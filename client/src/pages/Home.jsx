@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useRoomStore from '../store/roomStore';
 import './Home.css';
+import Navbar from '../components/Layout/Navbar';
 
 // Mock data for Recent Sessions sidebar
 const RECENT_SESSIONS = [
@@ -94,6 +95,8 @@ const Home = () => {
   const displayName = username || 'Developer';
 
   return (
+    <>
+    <Navbar />
     <div className="home" id="home-page">
       <div className="home-layout">
         {/* ── Main Content ── */}
@@ -271,6 +274,7 @@ const Home = () => {
         </aside>
       </div>
     </div>
+    </>
   );
 };
 

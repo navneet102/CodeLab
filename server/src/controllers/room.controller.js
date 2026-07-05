@@ -18,6 +18,7 @@ exports.createRoom = async (req, res, next) => {
       if (!existing) isUnique = true;
     }
 
+    console.log("Ran till ch1")
     const room = await Room.create({
       title,
       description: description || '',
@@ -28,6 +29,8 @@ exports.createRoom = async (req, res, next) => {
       testCases: testCases || [],
       owner,
     });
+
+    console.log("Ran till ch2")
 
     res.status(201).json({
       success: true,

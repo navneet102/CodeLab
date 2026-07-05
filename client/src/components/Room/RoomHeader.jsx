@@ -27,14 +27,14 @@ const RoomHeader = ({ onLeave }) => {
       <div className="room-header" id="room-header">
         {/* Left: Brand */}
         <Link to="/" className="room-header-brand" id="room-logo-link">
-          <div className="room-logo-icon">
+          {/* <div className="room-logo-icon">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
               <path d="M13.325 3.05L8.667 20.432a1 1 0 01-1.94-.485L11.385 2.565a1 1 0 011.94.485z" fill="#4edea3"/>
               <path d="M7.612 14.776l-3.36-3.36a1 1 0 010-1.415l3.36-3.36a1 1 0 111.414 1.415L6.368 10.71a.5.5 0 000 .707l2.658 2.658a1 1 0 01-1.414 1.414z" fill="#4edea3"/>
               <path d="M16.388 14.776l3.36-3.36a1 1 0 000-1.415l-3.36-3.36a1 1 0 10-1.414 1.415l2.658 2.654a.5.5 0 010 .707l-2.658 2.658a1 1 0 001.414 1.414z" fill="#3b82f6"/>
             </svg>
-          </div>
-          <span className="room-logo-text">Code<span className="room-logo-accent">Collaborate</span></span>
+          </div> */}
+          <span className="room-logo-text">Code<span className="room-logo-accent">Collab</span></span>
         </Link>
 
         {/* Center: Live session indicator */}
@@ -115,12 +115,12 @@ const RoomHeader = ({ onLeave }) => {
               <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
             </svg>
           </button>
-          <button className="btn-icon" title="Settings">
+          {/* <button className="btn-icon" title="Settings">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
               <circle cx="12" cy="12" r="3"/>
               <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
             </svg>
-          </button>
+          </button> */}
 
           {/* User avatar */}
           <div className="room-user-avatar" title="You">

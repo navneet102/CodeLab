@@ -4,11 +4,12 @@ import { createRoom } from '../services/api';
 import { LANGUAGE_LIST, LANGUAGES } from '../utils/languages';
 import useRoomStore from '../store/roomStore';
 import './CreateRoom.css';
+import Navbar from '../components/Layout/Navbar';
 
 const MODES = [
-  { id: 'collaborate', name: 'Collaborate', icon: '🤝', desc: 'Free coding with everyone editing together' },
-  { id: 'interview', name: 'Interview', icon: '📋', desc: 'Set problems with test cases for evaluation' },
-  { id: 'teaching', name: 'Teaching', icon: '📚', desc: 'Teacher-led coding with guided exercises' },
+  { id: 'collaborate', name: 'Collaborate', desc: 'Free coding with everyone editing together' },
+  { id: 'interview', name: 'Interview', desc: 'Set problems with test cases for evaluation' },
+  { id: 'teaching', name: 'Teaching', desc: 'Teacher-led coding with guided exercises' },
 ];
 
 const CreateRoom = () => {
@@ -76,6 +77,8 @@ const CreateRoom = () => {
   };
 
   return (
+    <>
+    <Navbar />
     <div className="create-room-page" id="create-room-page">
       <div className="create-room-container animate-fadeIn">
         <div className="create-room-header">
@@ -156,7 +159,7 @@ const CreateRoom = () => {
                       data-mode={mode.id}
                       title={mode.desc}
                     >
-                      <span className="mode-icon">{mode.icon}</span>
+                      {/* <span className="mode-icon">{mode.icon}</span> */}
                       <span className="mode-name">{mode.name}</span>
                     </button>
                   ))}
@@ -247,11 +250,12 @@ const CreateRoom = () => {
             disabled={loading}
             id="submit-create-room"
           >
-            {loading ? 'Creating...' : '🚀 Create Room'}
+            {loading ? 'Creating...' : 'Create Room'}
           </button>
         </form>
       </div>
     </div>
+    </>
   );
 };
 

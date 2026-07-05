@@ -1,7 +1,7 @@
 .room-page {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - var(--toolbar-height));
+  height: 100vh;
   overflow: hidden;
   background: var(--surface);
 }
