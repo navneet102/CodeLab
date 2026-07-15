@@ -320,7 +320,7 @@
   flex-direction: column;
   gap: 3px;
   transition: background var(--transition-fast);
-  cursor: pointer;
+  cursor: default;
 }
 .recent-session-item:last-child { border-bottom: none; }
 .recent-session-item:hover {

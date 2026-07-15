@@ -28,6 +28,7 @@ exports.createRoom = async (req, res, next) => {
       starterCode: starterCode || '',
       testCases: testCases || [],
       owner,
+      participants: [owner],
     });
 
     console.log("Ran till ch2")
@@ -69,15 +70,24 @@ exports.getRoomByCode = async (req, res, next) => {
   }
 };
 
-// List active rooms
+// List active rooms and recent sessions
 exports.listRooms = async (req, res, next) => {
   try {
-    const rooms = await Room.find({ isActive: true })
-      .select('title inviteCode language mode owner activeUsers createdAt')
+    const activeRooms = await Room.find({ isActive: true })
+      .select('title inviteCode language mode owner activeUsers description participants createdAt')
       .sort({ createdAt: -1 })
       .limit(50);
 
-    res.json({ success: true, rooms });
+    const recentSessions = await Room.find({ isActive: false })
+      .select('title inviteCode language mode owner activeUsers description participants createdAt closedAt updatedAt')
+      .sort({ updatedAt: -1 })
+      .limit(10);
+
+    res.json({
+      success: true,
+      activeRooms,
+      recentSessions,
+    });
   } catch (error) {
     next(error);
   }

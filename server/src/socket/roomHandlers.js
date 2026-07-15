@@ -41,6 +41,8 @@ module.exports = (io, socket) => {
       // Add user to room in DB
       await Room.findByIdAndUpdate(room._id, {
         $push: { activeUsers: userObj },
+        $addToSet: { participants: username },
+        isActive: true,
       });
 
       // Join the socket.io room
@@ -104,18 +106,31 @@ async function handleUserLeave(socket) {
   if (!socket.roomId) return;
 
   try {
-    // Remove user from room in DB
-    await Room.findByIdAndUpdate(socket.roomId, {
-      $pull: { activeUsers: { socketId: socket.id } },
-    });
+    // Remove user from room in DB and get the updated document
+    const updatedRoom = await Room.findByIdAndUpdate(
+      socket.roomId,
+      { $pull: { activeUsers: { socketId: socket.id } } },
+      { new: true }
+    );
 
-    // Notify others
-    socket.to(socket.roomId).emit('room:user-left', {
-      username: socket.username,
-      socketId: socket.id,
-    });
+    if (updatedRoom) {
+      // Notify others
+      socket.to(socket.roomId).emit('room:user-left', {
+        username: socket.username,
+        socketId: socket.id,
+      });
 
-    console.log(`👤 ${socket.username} left room`);
+      console.log(`👤 ${socket.username} left room`);
+
+      // If no active users left, mark room as inactive and save closedAt
+      if (updatedRoom.activeUsers.length === 0) {
+        updatedRoom.isActive = false;
+        updatedRoom.closedAt = new Date();
+        await updatedRoom.save();
+        console.log(`🏠 Room ${updatedRoom.inviteCode} is now inactive (0 active users)`);
+      }
+    }
+
     socket.leave(socket.roomId);
     socket.roomId = null;
   } catch (error) {
