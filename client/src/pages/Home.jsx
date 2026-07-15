@@ -84,6 +84,7 @@ const Home = () => {
   const [recentSessions, setRecentSessions] = useState([]);
   const [activeFilter, setActiveFilter] = useState('all');
   const [loading, setLoading] = useState(true);
+  const [showAllActive, setShowAllActive] = useState(false);
 
   useEffect(() => {
     const fetchRooms = async () => {
@@ -119,6 +120,9 @@ const Home = () => {
     if (activeFilter === 'all') return true;
     return room.mode === activeFilter;
   });
+
+  const displayedActiveRooms = showAllActive ? filteredRooms : filteredRooms.slice(0, 3);
+  const displayedRecentSessions = recentSessions.slice(0, 4);
 
   const liveUsersCount = activeRooms.reduce((sum, r) => sum + (r.activeUsers?.length || 0), 0);
 
@@ -262,7 +266,7 @@ const Home = () => {
                     </td>
                   </tr>
                 ) : (
-                  filteredRooms.map((room) => (
+                  displayedActiveRooms.map((room) => (
                     <tr key={room._id} className="rooms-table-row" id={room._id}>
                       <td className="room-name-cell">{room.title}</td>
                       <td>
@@ -293,9 +297,16 @@ const Home = () => {
             </table>
 
             <div className="active-rooms-footer">
-              <button className="view-all-link" id="view-all-rooms-btn" onClick={() => setActiveFilter('all')}>
-                View All Active Rooms
-              </button>
+              {!showAllActive && filteredRooms.length > 3 && (
+                <button className="view-all-link" id="view-all-rooms-btn" onClick={() => setShowAllActive(true)}>
+                  View All Active Rooms
+                </button>
+              )}
+              {showAllActive && (
+                <button className="view-all-link" id="view-all-rooms-btn" onClick={() => setShowAllActive(false)}>
+                  Show Less
+                </button>
+              )}
             </div>
           </div>
         </main>
@@ -317,13 +328,11 @@ const Home = () => {
                   No recent sessions.
                 </div>
               ) : (
-                recentSessions.map((room) => (
+                displayedRecentSessions.map((room) => (
                   <div
                     key={room._id}
                     className="recent-session-item"
                     id={`recent-session-${room._id}`}
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => navigate(`/room/${room.inviteCode}`)}
                   >
                     <div className="rs-top">
                       <SessionChip type={room.mode} />
@@ -341,7 +350,7 @@ const Home = () => {
           </div>
 
           {/* Gateway Status */}
-          <div className="sidebar-card gateway-card" id="gateway-card">
+          {/* <div className="sidebar-card gateway-card" id="gateway-card">
             <div className="gateway-status">
               <span className="gateway-dot" />
               <span className="gateway-label">Collaboration Gateway Active</span>
@@ -356,7 +365,7 @@ const Home = () => {
                 <div className="gateway-stat-value">{liveUsersCount}</div>
               </div>
             </div>
-          </div>
+          </div> */}
         </aside>
       </div>
     </div>
