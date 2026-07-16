@@ -173,10 +173,11 @@ const Home = () => {
             {/* Join Room card */}
             <div className="bento-card bento-card--join" id="bento-join">
               <div className="bento-bg-icon">
-                <svg viewBox="0 0 80 80" fill="none">
-                  <circle cx="28" cy="32" r="12" stroke="currentColor" strokeWidth="3"/>
-                  <circle cx="52" cy="32" r="12" stroke="currentColor" strokeWidth="3"/>
-                  <path d="M8 64c0-12 10-20 20-20h24c10 0 20 8 20 20" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                  <circle cx="9" cy="7" r="4" />
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
                 </svg>
               </div>
               <div className="bento-icon-wrapper">

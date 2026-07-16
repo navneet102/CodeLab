@@ -39,12 +39,12 @@ const RoomHeader = ({ onLeave }) => {
 
         {/* Center: Live session indicator */}
         <div className="room-header-center" id="room-header-center">
-          <div className="live-chip">
+          {/* <div className="live-chip">
             <span className="live-dot" />
             LIVE SESSION
-          </div>
+          </div> */}
           <span className="room-session-title">{room.title}</span>
-          <span className={`badge ${mode.badgeClass}`}>{mode.label}</span>
+          {/* <span className={`badge ${mode.badgeClass}`}>{mode.label}</span> */}
         </div>
 
         {/* Right: Language selector, user avatars, invite, leave */}
@@ -109,12 +109,12 @@ const RoomHeader = ({ onLeave }) => {
           </button>
 
           {/* Icon buttons */}
-          <button className="btn-icon" title="Notifications">
+          {/* <button className="btn-icon" title="Notifications">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
               <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
               <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
             </svg>
-          </button>
+          </button> */}
           {/* <button className="btn-icon" title="Settings">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
               <circle cx="12" cy="12" r="3"/>
