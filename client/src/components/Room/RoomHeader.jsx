@@ -8,7 +8,7 @@ import InviteModal from './InviteModal';
 import './RoomHeader.css';
 
 const RoomHeader = ({ onLeave }) => {
-  const { room, activeUsers } = useRoomStore();
+  const { room, activeUsers, username } = useRoomStore();
   const { language, setLanguage, theme, setTheme } = useEditorStore();
   const [showInvite, setShowInvite] = useState(false);
 
@@ -76,21 +76,51 @@ const RoomHeader = ({ onLeave }) => {
             ))}
           </select>
 
-          {/* User avatars */}
-          <div className="user-avatars" id="user-avatars">
-            {activeUsers.slice(0, 4).map((user, i) => (
-              <div
-                key={user.socketId || i}
-                className="user-avatar"
-                style={{ '--avatar-color': user.color }}
-                title={user.username}
-              >
-                {user.username?.charAt(0).toUpperCase()}
+          {/* User avatars with hover dropdown */}
+          <div className="user-presence-dropdown" id="user-presence-dropdown">
+            <div className="user-avatars" id="user-avatars">
+              {activeUsers.slice(0, 3).map((user, i) => (
+                <div
+                  key={user.socketId || i}
+                  className="user-avatar"
+                  style={{ '--avatar-color': user.color }}
+                >
+                  {user.username?.charAt(0).toUpperCase()}
+                </div>
+              ))}
+              {activeUsers.length > 3 && (
+                <div className="user-avatar user-avatar-more">+{activeUsers.length - 3}</div>
+              )}
+            </div>
+
+            {/* Dropdown menu */}
+            <div className="users-dropdown-menu" id="users-dropdown-menu">
+              <div className="dropdown-header">
+                <span>Active Users ({activeUsers.length})</span>
               </div>
-            ))}
-            {activeUsers.length > 4 && (
-              <div className="user-avatar user-avatar-more">+{activeUsers.length - 4}</div>
-            )}
+              <div className="dropdown-list">
+                {activeUsers.map((user, i) => {
+                  const isSelf = user.username === username;
+                  const isHost = user.username === room.owner;
+                  return (
+                    <div key={user.socketId || i} className="dropdown-item">
+                      <div
+                        className="dropdown-item-avatar"
+                        style={{ backgroundColor: user.color || 'var(--interview-accent)' }}
+                      >
+                        {user.username?.charAt(0).toUpperCase()}
+                      </div>
+                      <span className="dropdown-item-name">
+                        {user.username}
+                        {isSelf && <span className="badge-self">You</span>}
+                        {isHost && <span className="badge-host">Host</span>}
+                      </span>
+                      <span className="dropdown-item-status-dot" />
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
 
           {/* Invite */}
@@ -124,7 +154,7 @@ const RoomHeader = ({ onLeave }) => {
 
           {/* User avatar */}
           <div className="room-user-avatar" title="You">
-            {useRoomStore.getState().username?.charAt(0).toUpperCase() || 'U'}
+            {username?.charAt(0).toUpperCase() || 'U'}
           </div>
         </div>
       </div>

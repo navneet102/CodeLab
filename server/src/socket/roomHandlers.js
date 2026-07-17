@@ -38,6 +38,11 @@ module.exports = (io, socket) => {
         joinedAt: new Date(),
       };
 
+      // Remove any existing sessions for this username to prevent duplicates
+      await Room.findByIdAndUpdate(room._id, {
+        $pull: { activeUsers: { username } }
+      });
+
       // Add user to room in DB
       await Room.findByIdAndUpdate(room._id, {
         $push: { activeUsers: userObj },

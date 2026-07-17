@@ -29,10 +29,14 @@ const useRoomStore = create((set, get) => ({
 
   setUserColor: (color) => set({ userColor: color }),
 
-  setActiveUsers: (users) => set({ activeUsers: users }),
+  setActiveUsers: (users) => set({
+    activeUsers: users.filter((u, index, self) =>
+      index === self.findIndex((t) => t.username === u.username)
+    )
+  }),
 
   addUser: (user) => set((state) => ({
-    activeUsers: [...state.activeUsers.filter(u => u.socketId !== user.socketId), user],
+    activeUsers: [...state.activeUsers.filter(u => u.socketId !== user.socketId && u.username !== user.username), user],
   })),
 
   removeUser: (socketId) => set((state) => ({

@@ -151,3 +151,124 @@
   cursor: pointer;
   flex-shrink: 0;
 }
+
+/* User presence dropdown container */
+.user-presence-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown menu */
+.users-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: var(--surface-container-high);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-lg);
+  width: 240px;
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: var(--glass-blur);
+  z-index: var(--z-dropdown);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: opacity var(--transition-fast), transform var(--transition-fast), visibility var(--transition-fast);
+  padding: var(--space-xs) 0;
+}
+
+/* Hover effect to show the dropdown */
+.user-presence-dropdown:hover .users-dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Dropdown Header */
+.dropdown-header {
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--outline-variant);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--on-surface-variant);
+  letter-spacing: 0.05em;
+}
+
+/* Dropdown list & item */
+.dropdown-list {
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  transition: background var(--transition-fast);
+}
+
+.dropdown-item:hover {
+  background: var(--surface-container-highest);
+}
+
+/* Dropdown item avatar */
+.dropdown-item-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* Dropdown item name */
+.dropdown-item-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--on-surface);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Badges */
+.badge-self,
+.badge-host {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 4px;
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
+  line-height: 1;
+  display: inline-block;
+}
+
+.badge-self {
+  background: var(--outline-variant);
+  color: var(--on-surface);
+}
+
+.badge-host {
+  background: rgba(59, 130, 246, 0.15);
+  color: var(--primary-fixed-dim);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+/* Status dot */
+.dropdown-item-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--tertiary); /* standard green status */
+  flex-shrink: 0;
+}

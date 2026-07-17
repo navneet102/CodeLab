@@ -213,11 +213,11 @@ const Room = () => {
               </button>
               {(isInterview || hasTestCases) && (
                 <button
-                  className="btn btn-ghost btn-sm"
+                  className="btn btn-secondary btn-sm"
                   onClick={handleRunTests}
                   id="run-tests-btn"
                 >
-                  🧪 Run Tests
+                  Run Tests
                 </button>
               )}
             </div>
