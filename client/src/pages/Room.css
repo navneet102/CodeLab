@@ -313,6 +313,10 @@
   animation: spin 0.7s linear infinite;
 }
 
+#run-tests-btn {
+  background-color: rgba(59, 255, 59, 0.5);
+}
+
 /* ── Responsive ── */
 @media (max-width: 1024px) {
   .workspace-left  { width: 220px; }

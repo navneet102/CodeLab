@@ -10,6 +10,7 @@ import ProblemPanel from '../components/Room/ProblemPanel';
 import RoomChat from '../components/Chat/RoomChat';
 import OutputTerminal from '../components/Terminal/OutputTerminal';
 import UserPresence from '../components/Room/UserPresence';
+import VoiceChat from '../components/Voice/VoiceChat';
 import './Room.css';
 
 const Room = () => {
@@ -79,8 +80,8 @@ const Room = () => {
         <div className="username-card animate-fadeIn">
           <div className="username-card-icon">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-              <circle cx="12" cy="7" r="4"/>
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
             </svg>
           </div>
           <h2>Join Room</h2>
@@ -181,7 +182,7 @@ const Room = () => {
         <div className="workspace-center" id="workspace-center">
           {/* Tab bar above editor */}
           {/* <div className="editor-tab-bar" id="editor-tab-bar"> */}
-            {/* <div className="editor-tab active">
+          {/* <div className="editor-tab active">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                 <polyline points="14 2 14 8 20 8"/>
@@ -207,7 +208,7 @@ const Room = () => {
                 id="run-code-btn"
               >
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
-                  <polygon points="5 3 19 12 5 21 5 3"/>
+                  <polygon points="5 3 19 12 5 21 5 3" />
                 </svg>
                 Run
               </button>
@@ -305,6 +306,12 @@ const Room = () => {
             </div>
             <RoomChat sendMessage={sendMessage} />
           </div>
+          
+          <div style={{height: 4, backgroundColor: 'black'}}>
+          </div>
+
+          {/* Voice Chat */}
+          <VoiceChat roomId={room?._id} />
         </div>
       </div>
 

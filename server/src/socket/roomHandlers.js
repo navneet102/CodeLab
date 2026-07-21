@@ -101,6 +101,20 @@ module.exports = (io, socket) => {
     io.to(socket.roomId).emit('chat:message', chatMsg);
   });
 
+  // WebRTC Signaling
+  socket.on('webrtc:signal', ({ to, signal }) => {
+    io.to(to).emit('webrtc:signal', {
+      from: socket.id,
+      signal,
+    });
+  });
+
+  socket.on('webrtc:renegotiate', ({ to }) => {
+    io.to(to).emit('webrtc:renegotiate', {
+      from: socket.id,
+    });
+  });
+
   // Handle disconnect
   socket.on('disconnect', async () => {
     await handleUserLeave(socket);
