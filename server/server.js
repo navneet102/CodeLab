@@ -19,8 +19,8 @@ const startServer = async () => {
   // Setup Socket.IO
   setupSocket(server);
 
-  // Start Yjs WebSocket server (separate port)
-  startYjsServer();
+  // Start Yjs WebSocket server on the same port
+  startYjsServer(server);
 
   // Start the main server
   server.listen(PORT, () => {
