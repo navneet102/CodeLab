@@ -273,6 +273,10 @@ const worker = new Worker(
   {
     connection,
     concurrency: 3, // Process up to 3 jobs at a time
+    limiter: {
+      max: 10,       // Max 10 execution jobs
+      duration: 1000 // per 1000ms (1 second)
+    },
   }
 );
 
