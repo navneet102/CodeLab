@@ -1,7 +1,6 @@
 const http = require('http');
 const app = require('./src/app');
 const connectDB = require('./src/config/db');
-const { getRedisClient } = require('./src/config/redis');
 const { setupSocket } = require('./src/socket');
 const { startYjsServer } = require('./src/yjs/yjsServer');
 const { PORT } = require('./src/config/env');

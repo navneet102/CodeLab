@@ -73,9 +73,4 @@ const setupSocket = (httpServer) => {
   return io;
 };
 
-const getIO = () => {
-  if (!io) throw new Error('Socket.IO not initialized');
-  return io;
-};
-
-module.exports = { setupSocket, getIO };
+module.exports = { setupSocket };

@@ -38,4 +38,4 @@ const startYjsServer = (server) => {
   });
 };
 
-module.exports = { startYjsServer, getYDoc };
+module.exports = { startYjsServer };
