@@ -1,6 +1,6 @@
 const { Server } = require('socket.io');
 const { CLIENT_URL } = require('../config/env');
-const { createRedisConnection } = require('../config/redis');
+const createRedisConnection = require('../config/redis');
 const Execution = require('../models/Execution');
 const roomHandlers = require('./roomHandlers');
 const executionHandlers = require('./executionHandlers');

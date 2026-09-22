@@ -1,5 +1,5 @@
 const { Queue } = require('bullmq');
-const { createRedisConnection } = require('../config/redis');
+const createRedisConnection = require('../config/redis');
 
 const executionQueue = new Queue('code-execution', {
   connection: createRedisConnection(),

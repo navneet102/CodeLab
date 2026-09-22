@@ -4,7 +4,7 @@ import { WebsocketProvider } from 'y-websocket';
 import { MonacoBinding } from 'y-monaco';
 import useRoomStore from '../store/roomStore';
 
-const YJS_URL = import.meta.env.VITE_YJS_URL || 'ws://localhost:4444';
+const YJS_URL = import.meta.env.VITE_YJS_URL || 'ws://localhost:3001/yjs';
 
 const useYjs = (roomId, editorRef, monacoRef) => {
   const providerRef = useRef(null);

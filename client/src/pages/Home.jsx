@@ -1,89 +1,111 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useRoomStore from '../store/roomStore';
+import { listRooms } from '../services/api';
 import './Home.css';
 import Navbar from '../components/Layout/Navbar';
-
-// Mock data for Recent Sessions sidebar
-const RECENT_SESSIONS = [
-  {
-    type: 'teaching',
-    title: 'Rust Memory Safety Deep Dive',
-    meta: 'Duration: 1h 24m | Participants: 12',
-    sub: 'Shared by: @prof_dev',
-    time: '15m ago',
-  },
-  {
-    type: 'interview',
-    title: 'Mid-Level Backend Interview',
-    meta: 'Status: Completed | Feedback Sent',
-    sub: 'Role: Node.js Engineer',
-    time: '2h ago',
-  },
-  {
-    type: 'collab',
-    title: 'Project: Zen-Architecture Refactor',
-    meta: 'Sync session for core contributors',
-    sub: 'Repo: zen-core-v2',
-    time: 'Yesterday',
-  },
-];
 
 const SESSION_TYPE_LABEL = {
   teaching:  'Teaching',
   interview: 'Interview',
+  collaborate: 'Collab',
   collab:    'Collab',
 };
 
-// Mock active rooms for the table
-const MOCK_ACTIVE_ROOMS = [
-  {
-    id: 'room-1',
-    name: 'System Design Review',
-    type: 'teaching',
-    participants: ['JD', 'AS', '+2'],
-    topic: 'Microservices',
-    inviteCode: null,
-  },
-  {
-    id: 'room-2',
-    name: 'FE Engineer Candidate #2',
-    type: 'interview',
-    participants: ['HF', 'C'],
-    topic: 'React / Hooks',
-    inviteCode: null,
-  },
-  {
-    id: 'room-3',
-    name: 'LeetCode Grind — Graph Problems',
-    type: 'collab',
-    participants: ['A', '+6'],
-    topic: 'DFS / BFS',
-    inviteCode: null,
-  },
-];
+const formatDuration = (start, end) => {
+  if (!start) return '';
+  const startTime = new Date(start);
+  const endTime = end ? new Date(end) : new Date();
+  const diffMs = Math.abs(endTime - startTime);
+  const diffMins = Math.floor(diffMs / 60000);
+  if (diffMins < 1) return 'under a min';
+  const hours = Math.floor(diffMins / 60);
+  const mins = diffMins % 60;
+  if (hours > 0) {
+    return `${hours}h ${mins}m`;
+  }
+  return `${mins}m`;
+};
+
+const timeAgo = (dateString) => {
+  if (!dateString) return '';
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffMs = now - date;
+  const diffSecs = Math.floor(diffMs / 1000);
+  const diffMins = Math.floor(diffSecs / 60);
+  const diffHours = Math.floor(diffMins / 60);
+  const diffDays = Math.floor(diffHours / 24);
+
+  if (diffSecs < 60) return 'just now';
+  if (diffMins < 60) return `${diffMins}m ago`;
+  if (diffHours < 24) return `${diffHours}h ago`;
+  if (diffDays === 1) return 'yesterday';
+  return `${diffDays}d ago`;
+};
 
 const SessionChip = ({ type }) => (
-  <span className={`badge badge-${type}`}>
+  <span className={`badge badge-${type === 'collaborate' ? 'collab' : type}`}>
     {SESSION_TYPE_LABEL[type] || type}
   </span>
 );
 
-const ParticipantAvatars = ({ participants }) => (
-  <div className="participant-avatars">
-    {participants.map((p, i) => (
-      <div key={i} className={`participant-avatar ${p.startsWith('+') ? 'more' : ''}`}>
-        {p}
-      </div>
-    ))}
-  </div>
-);
+const ParticipantAvatars = ({ participants }) => {
+  const displayNames = participants.map(p => typeof p === 'string' ? p : p.username);
+  const maxAvatars = 3;
+  const toShow = displayNames.slice(0, maxAvatars);
+  const remaining = displayNames.length - maxAvatars;
+
+  return (
+    <div className="participant-avatars">
+      {toShow.map((name, i) => {
+        const initial = name ? name.charAt(0).toUpperCase() : '?';
+        return (
+          <div key={i} className="participant-avatar" title={name}>
+            {initial}
+          </div>
+        );
+      })}
+      {remaining > 0 && (
+        <div className="participant-avatar more" title={`${remaining} more`}>
+          +{remaining}
+        </div>
+      )}
+    </div>
+  );
+};
 
 const Home = () => {
   const navigate = useNavigate();
   const [joinCode, setJoinCode] = useState('');
   const { username, setUsername } = useRoomStore();
   const [localUsername, setLocalUsername] = useState(username);
+  const [activeRooms, setActiveRooms] = useState([]);
+  const [recentSessions, setRecentSessions] = useState([]);
+  const [activeFilter, setActiveFilter] = useState('all');
+  const [loading, setLoading] = useState(true);
+  const [showAllActive, setShowAllActive] = useState(false);
+
+  useEffect(() => {
+    const fetchRooms = async () => {
+      try {
+        const data = await listRooms();
+        if (data.success) {
+          setActiveRooms(data.activeRooms || []);
+          setRecentSessions(data.recentSessions || []);
+        }
+      } catch (err) {
+        console.error('Error fetching rooms:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRooms();
+    // Poll every 10 seconds to keep rooms active list updated
+    const interval = setInterval(fetchRooms, 10000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleJoin = (e) => {
     e.preventDefault();
@@ -93,6 +115,16 @@ const Home = () => {
   };
 
   const displayName = username || 'Developer';
+
+  const filteredRooms = activeRooms.filter((room) => {
+    if (activeFilter === 'all') return true;
+    return room.mode === activeFilter;
+  });
+
+  const displayedActiveRooms = showAllActive ? filteredRooms : filteredRooms.slice(0, 3);
+  const displayedRecentSessions = recentSessions.slice(0, 4);
+
+  const liveUsersCount = activeRooms.reduce((sum, r) => sum + (r.activeUsers?.length || 0), 0);
 
   return (
     <>
@@ -141,10 +173,11 @@ const Home = () => {
             {/* Join Room card */}
             <div className="bento-card bento-card--join" id="bento-join">
               <div className="bento-bg-icon">
-                <svg viewBox="0 0 80 80" fill="none">
-                  <circle cx="28" cy="32" r="12" stroke="currentColor" strokeWidth="3"/>
-                  <circle cx="52" cy="32" r="12" stroke="currentColor" strokeWidth="3"/>
-                  <path d="M8 64c0-12 10-20 20-20h24c10 0 20 8 20 20" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                  <circle cx="9" cy="7" r="4" />
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
                 </svg>
               </div>
               <div className="bento-icon-wrapper">
@@ -169,7 +202,7 @@ const Home = () => {
                   id="room-code-input"
                 />
                 <button type="submit" className="btn btn-secondary bento-action" id="browse-rooms-btn">
-                  Browse Rooms
+                  Join Room
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M5 12h14M12 5l7 7-7 7"/>
                   </svg>
@@ -183,9 +216,30 @@ const Home = () => {
             <div className="active-rooms-header">
               <h2 className="active-rooms-title">Active Rooms</h2>
               <div className="active-rooms-filters">
-                <button className="filter-chip filter-chip--active">Teaching</button>
-                <button className="filter-chip">Interview</button>
-                <button className="filter-chip">Collab</button>
+                <button
+                  className={`filter-chip ${activeFilter === 'all' ? 'filter-chip--active' : ''}`}
+                  onClick={() => setActiveFilter('all')}
+                >
+                  All
+                </button>
+                <button
+                  className={`filter-chip ${activeFilter === 'teaching' ? 'filter-chip--active' : ''}`}
+                  onClick={() => setActiveFilter('teaching')}
+                >
+                  Teaching
+                </button>
+                <button
+                  className={`filter-chip ${activeFilter === 'interview' ? 'filter-chip--active' : ''}`}
+                  onClick={() => setActiveFilter('interview')}
+                >
+                  Interview
+                </button>
+                <button
+                  className={`filter-chip ${activeFilter === 'collaborate' ? 'filter-chip--active' : ''}`}
+                  onClick={() => setActiveFilter('collaborate')}
+                >
+                  Collab
+                </button>
               </div>
             </div>
 
@@ -200,33 +254,60 @@ const Home = () => {
                 </tr>
               </thead>
               <tbody>
-                {MOCK_ACTIVE_ROOMS.map((room) => (
-                  <tr key={room.id} className="rooms-table-row" id={room.id}>
-                    <td className="room-name-cell">{room.name}</td>
-                    <td>
-                      <SessionChip type={room.type} />
-                    </td>
-                    <td>
-                      <ParticipantAvatars participants={room.participants} />
-                    </td>
-                    <td className="room-topic-cell">{room.topic}</td>
-                    <td>
-                      <button
-                        className="join-room-link"
-                        onClick={() => room.inviteCode && navigate(`/room/${room.inviteCode}`)}
-                      >
-                        Join Room
-                      </button>
+                {loading ? (
+                  <tr>
+                    <td colSpan="5" style={{ textAlign: 'center', color: 'var(--outline)', padding: '24px' }}>
+                      Loading active rooms...
                     </td>
                   </tr>
-                ))}
+                ) : filteredRooms.length === 0 ? (
+                  <tr>
+                    <td colSpan="5" style={{ textAlign: 'center', color: 'var(--outline)', padding: '24px' }}>
+                      No active rooms found. Start a new session above!
+                    </td>
+                  </tr>
+                ) : (
+                  displayedActiveRooms.map((room) => (
+                    <tr key={room._id} className="rooms-table-row" id={room._id}>
+                      <td className="room-name-cell">{room.title}</td>
+                      <td>
+                        <SessionChip type={room.mode} />
+                      </td>
+                      <td>
+                        <ParticipantAvatars participants={room.activeUsers || []} />
+                      </td>
+                      <td className="room-topic-cell">
+                        {room.description ? (
+                          room.description.length > 50 ? `${room.description.substring(0, 50)}...` : room.description
+                        ) : (
+                          `Code in ${room.language}`
+                        )}
+                      </td>
+                      <td>
+                        <button
+                          className="join-room-link"
+                          onClick={() => room.inviteCode && navigate(`/room/${room.inviteCode}`)}
+                        >
+                          Join Room
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
 
             <div className="active-rooms-footer">
-              <button className="view-all-link" id="view-all-rooms-btn">
-                View All Active Rooms
-              </button>
+              {!showAllActive && filteredRooms.length > 3 && (
+                <button className="view-all-link" id="view-all-rooms-btn" onClick={() => setShowAllActive(true)}>
+                  View All Active Rooms
+                </button>
+              )}
+              {showAllActive && (
+                <button className="view-all-link" id="view-all-rooms-btn" onClick={() => setShowAllActive(false)}>
+                  Show Less
+                </button>
+              )}
             </div>
           </div>
         </main>
@@ -237,25 +318,40 @@ const Home = () => {
           <div className="sidebar-card" id="recent-sessions-card">
             <div className="sidebar-card-header">
               <span>Recent Sessions</span>
-              <button className="view-all-link">View All</button>
             </div>
             <div className="recent-sessions-list">
-              {RECENT_SESSIONS.map((s, i) => (
-                <div key={i} className="recent-session-item" id={`recent-session-${i}`}>
-                  <div className="rs-top">
-                    <SessionChip type={s.type} />
-                    <span className="rs-time">{s.time}</span>
-                  </div>
-                  <div className="rs-title">{s.title}</div>
-                  <div className="rs-meta">{s.meta}</div>
-                  <div className="rs-sub">{s.sub}</div>
+              {loading ? (
+                <div style={{ padding: '16px', color: 'var(--outline)', fontSize: '13px' }}>
+                  Loading recent sessions...
                 </div>
-              ))}
+              ) : recentSessions.length === 0 ? (
+                <div style={{ padding: '16px', color: 'var(--outline)', fontSize: '13px' }}>
+                  No recent sessions.
+                </div>
+              ) : (
+                displayedRecentSessions.map((room) => (
+                  <div
+                    key={room._id}
+                    className="recent-session-item"
+                    id={`recent-session-${room._id}`}
+                  >
+                    <div className="rs-top">
+                      <SessionChip type={room.mode} />
+                      <span className="rs-time">{timeAgo(room.closedAt || room.updatedAt)}</span>
+                    </div>
+                    <div className="rs-title">{room.title}</div>
+                    <div className="rs-meta">
+                      Duration: {formatDuration(room.createdAt, room.closedAt)} | Participants: {room.participants?.length || 0}
+                    </div>
+                    <div className="rs-sub">Shared by: @{room.owner}</div>
+                  </div>
+                ))
+              )}
             </div>
           </div>
 
           {/* Gateway Status */}
-          <div className="sidebar-card gateway-card" id="gateway-card">
+          {/* <div className="sidebar-card gateway-card" id="gateway-card">
             <div className="gateway-status">
               <span className="gateway-dot" />
               <span className="gateway-label">Collaboration Gateway Active</span>
@@ -267,10 +363,10 @@ const Home = () => {
               </div>
               <div className="gateway-stat">
                 <div className="gateway-stat-label label-caps">Live Users</div>
-                <div className="gateway-stat-value">8,142</div>
+                <div className="gateway-stat-value">{liveUsersCount}</div>
               </div>
             </div>
-          </div>
+          </div> */}
         </aside>
       </div>
     </div>

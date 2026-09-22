@@ -49,10 +49,10 @@ const OutputTerminal = () => {
         </div>
 
         {/* Sync indicator */}
-        <div className="terminal-sync-indicator">
+        {/* <div className="terminal-sync-indicator">
           <span className="sync-dot" />
           Sync: 12ms delay
-        </div>
+        </div> */}
       </div>
 
       {/* Body */}
@@ -132,7 +132,7 @@ const OutputTerminal = () => {
         </div>
       )}
 
-      {activeTab === 'debug' && (
+      {/* {activeTab === 'debug' && (
         <div className="terminal-body terminal-debug" id="terminal-debug">
           {executionResult?.executionTimeMs > 0 && (
             <>
@@ -160,7 +160,7 @@ const OutputTerminal = () => {
             <div className="terminal-placeholder">No debug output yet.</div>
           )}
         </div>
-      )}
+      )} */}
     </div>
   );
 };

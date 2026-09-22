@@ -1,16 +1,70 @@
-import { Link, useLocation } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import useRoomStore from '../../store/roomStore';
+import { listRooms } from '../../services/api';
 import './Navbar.css';
 
 const Navbar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { username } = useRoomStore();
   const isRoom = location.pathname.startsWith('/room/') && !location.pathname.includes('create');
   const isHome = location.pathname === '/';
 
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeRooms, setActiveRooms] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const searchRef = useRef(null);
+
   const initials = username
     ? username.slice(0, 2).toUpperCase()
     : 'U';
+
+  const fetchActiveRooms = async () => {
+    setIsLoading(true);
+    try {
+      const data = await listRooms();
+      if (data.success) {
+        setActiveRooms(data.activeRooms || []);
+      }
+    } catch (err) {
+      console.error('Error fetching rooms for search:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
+  const handleRoomClick = (inviteCode) => {
+    setIsOpen(false);
+    setSearchQuery('');
+    navigate(`/room/${inviteCode}`);
+  };
+
+  const filteredRooms = activeRooms.filter((room) =>
+    room.title?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <nav className="navbar" id="main-navbar">
@@ -44,7 +98,7 @@ const Navbar = () => {
         </Link>
 
         {/* Nav Links (non-room pages) */}
-        {!isRoom && (
+        {/* {!isRoom && (
           <div className="navbar-links">
             <Link
               to="/"
@@ -55,7 +109,7 @@ const Navbar = () => {
             </Link>
             <span className="nav-link" id="nav-community">Community</span>
           </div>
-        )}
+        )} */}
 
         {/* Spacer */}
         <div className="navbar-spacer" />
@@ -64,25 +118,65 @@ const Navbar = () => {
         {!isRoom && (
           <>
             {/* Search */}
-            <div className="navbar-search" id="navbar-search">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-              </svg>
-              <input
-                type="text"
-                placeholder="Search rooms..."
-                className="navbar-search-input"
-                id="navbar-search-input"
-              />
+            <div className="navbar-search-container" ref={searchRef}>
+              <div className="navbar-search" id="navbar-search">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+                </svg>
+                <input
+                  type="text"
+                  placeholder="Search rooms..."
+                  className="navbar-search-input"
+                  id="navbar-search-input"
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    setIsOpen(true);
+                  }}
+                  onFocus={() => {
+                    setIsOpen(true);
+                    fetchActiveRooms();
+                  }}
+                />
+              </div>
+
+              {isOpen && searchQuery.trim() !== '' && (
+                <div className="navbar-search-dropdown" id="navbar-search-dropdown">
+                  {isLoading ? (
+                    <div className="search-dropdown-message">Loading rooms...</div>
+                  ) : filteredRooms.length > 0 ? (
+                    <div className="search-dropdown-list">
+                      {filteredRooms.map((room) => (
+                        <div
+                          key={room._id}
+                          className="search-dropdown-item"
+                          id={`search-item-${room.inviteCode}`}
+                          onClick={() => handleRoomClick(room.inviteCode)}
+                        >
+                          <div className="search-item-info">
+                            <span className="search-item-title">{room.title}</span>
+                            <span className="search-item-meta">
+                              {room.mode.charAt(0).toUpperCase() + room.mode.slice(1)} • {room.activeUsers?.length || 0} online
+                            </span>
+                          </div>
+                          <span className="search-item-code">{room.inviteCode}</span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="search-dropdown-message">No active rooms found</div>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Icon buttons */}
-            <button className="btn-icon" id="navbar-notifications" title="Notifications">
+            {/* <button className="btn-icon" id="navbar-notifications" title="Notifications">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
                 <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
                 <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
               </svg>
-            </button>
+            </button> */}
             {/* <button className="btn-icon" id="navbar-settings" title="Settings">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
                 <circle cx="12" cy="12" r="3"/>

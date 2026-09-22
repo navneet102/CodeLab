@@ -41,6 +41,10 @@ const roomSchema = new mongoose.Schema({
     color: String,
     joinedAt: { type: Date, default: Date.now },
   }],
+  participants: {
+    type: [String],
+    default: [],
+  },
   chat: [{
     username: String,
     message: String,
@@ -53,6 +57,9 @@ const roomSchema = new mongoose.Schema({
   isActive: {
     type: Boolean,
     default: true,
+  },
+  closedAt: {
+    type: Date,
   },
 }, {
   timestamps: true,

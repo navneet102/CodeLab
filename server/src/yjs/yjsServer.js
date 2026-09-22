@@ -2,7 +2,6 @@ const http = require('http');
 const WebSocket = require('ws');
 const Y = require('yjs');
 const { setupWSConnection } = require('./yjsUtils');
-const { YJS_PORT } = require('../config/env');
 
 // Store active Yjs documents
 const docs = new Map();
@@ -15,28 +14,28 @@ const getYDoc = (docName) => {
   return docs.get(docName);
 };
 
-const startYjsServer = () => {
-  const server = http.createServer((req, res) => {
-    res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.end('Yjs WebSocket Server');
+const startYjsServer = (server) => {
+  const wss = new WebSocket.Server({ noServer: true });
+
+  server.on('upgrade', (request, socket, head) => {
+    // Intercept WebSocket upgrade requests matching /yjs/
+    if (request.url.startsWith('/yjs/')) {
+      wss.handleUpgrade(request, socket, head, (ws) => {
+        wss.emit('connection', ws, request);
+      });
+    }
   });
 
-  const wss = new WebSocket.Server({ server });
-
   wss.on('connection', (ws, req) => {
-    // Extract room ID from URL path: /roomId
-    const docName = req.url.slice(1).split('?')[0];
+    // Extract room ID from URL path: /yjs/roomId
+    const docName = req.url.split('/yjs/')[1]?.split('?')[0];
+    if (!docName) return ws.close();
+
     console.log(`📝 Yjs connection for document: ${docName}`);
 
     const doc = getYDoc(docName);
     setupWSConnection(ws, doc, docName);
   });
-
-  server.listen(YJS_PORT, () => {
-    console.log(`✅ Yjs WebSocket server running on port ${YJS_PORT}`);
-  });
-
-  return server;
 };
 
 module.exports = { startYjsServer, getYDoc };
