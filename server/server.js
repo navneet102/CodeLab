@@ -10,9 +10,6 @@ const startServer = async () => {
   // Connect to MongoDB
   await connectDB();
 
-  // Initialize Redis connection
-  getRedisClient();
-
   // Create HTTP server
   const server = http.createServer(app);
 
