@@ -10,9 +10,28 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <style>#mobile-device-blocker{display:none;}</style>
   </head>
   <body>
     <div id="root"></div>
+    <div id="mobile-device-blocker" aria-live="polite">
+      <div class="mobile-blocker-card">
+        <div class="mobile-blocker-icon-wrap">
+          <svg class="mobile-blocker-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+            <line x1="8" y1="21" x2="16" y2="21"></line>
+            <line x1="12" y1="17" x2="12" y2="21"></line>
+          </svg>
+          <!-- <span class="mobile-blocker-badge">Desktop Only</span> -->
+        </div>
+        <h1 class="mobile-blocker-title">Best Viewed on bigger screens</h1>
+        <p class="mobile-blocker-message">
+          Please switch to a laptop or desktop to use this website.
+        </p>
+        <p class="mobile-blocker-submessage">
+        </p>
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

@@ -876,3 +876,99 @@ pre {
 .toggle-switch input:checked+.toggle-slider::before {
   transform: translateX(16px);
 }
+
+/* ============================
+   📱 Mobile Device Blocker
+   ============================ */
+#mobile-device-blocker {
+  display: none;
+}
+
+@media (max-width: 768px), (max-height: 500px) {
+  #root {
+    display: none !important;
+  }
+
+  #mobile-device-blocker {
+    display: flex;
+    position: fixed;
+    inset: 0;
+    z-index: 9999999;
+    background: #0c0e12;
+    background-image:
+      radial-gradient(circle at 50% 20%, rgba(77, 142, 255, 0.15) 0%, transparent 55%),
+      radial-gradient(circle at 80% 80%, rgba(78, 222, 163, 0.08) 0%, transparent 50%);
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    font-family: var(--font-sans, system-ui, -apple-system, sans-serif);
+  }
+
+  .mobile-blocker-card {
+    background: rgba(26, 28, 32, 0.9);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(75, 85, 99, 0.4);
+    border-radius: 20px;
+    padding: 36px 24px;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(59, 130, 246, 0.15);
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .mobile-blocker-icon-wrap {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .mobile-blocker-icon {
+    width: 54px;
+    height: 54px;
+    color: #adc6ff;
+    filter: drop-shadow(0 0 16px rgba(77, 142, 255, 0.5));
+  }
+
+  .mobile-blocker-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #adc6ff;
+    background: rgba(77, 142, 255, 0.15);
+    border: 1px solid rgba(173, 198, 255, 0.35);
+    border-radius: 9999px;
+  }
+
+  .mobile-blocker-title {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.35;
+    color: #f1f3f9;
+    margin: 0 0 12px 0;
+    letter-spacing: -0.02em;
+  }
+
+  .mobile-blocker-message {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #c2c6d6;
+    margin: 0 0 12px 0;
+  }
+
+  .mobile-blocker-submessage {
+    font-size: 13px;
+    line-height: 1.5;
+    color: #8c909f;
+    margin: 0;
+  }
+}
