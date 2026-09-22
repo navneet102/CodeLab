@@ -1,8 +1,0 @@
-FROM python:3.12-alpine
-
-RUN addgroup -S runner && adduser -S runner -G runner
-
-WORKDIR /code
-RUN chown runner:runner /code
-
-USER runner
